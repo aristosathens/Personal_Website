@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// ------------------------------------------- Definitions ------------------------------------------- //
+// ------------------------------------------- Types ------------------------------------------- //
 
 //
 // ResumeWebPage embeds the *WebPage type
@@ -25,6 +25,7 @@ type ResumeWebPage struct {
 
 // ------------------------------------------- Public ------------------------------------------- //
 
+// Initiates page
 func (p *ResumeWebPage) Init(localRootFolder string, pageDict *map[string]WebPageInterface) WebPageInterface {
 	p.PageData = NewWebPage("resume", "resume/", localRootFolder, pageDict, ResumeWebPageHandler)
 	p.Formatting = p.UrlStaticFolder + "formatting.css"

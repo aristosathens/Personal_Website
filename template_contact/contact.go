@@ -10,11 +10,11 @@ import (
 	"strings"
 )
 
-// ------------------------------------------- Definitions ------------------------------------------- //
+// ------------------------------------------- Types ------------------------------------------- //
 
 //
 // ContactWebPage embeds the *WebPage type
-// ContactWebPage implements the WebPageInterface via its Init() and GetPageData() functions
+// ContactWebPage implements the WebPageInterface via its Init() function
 // More details in web_definitions.go
 //
 
@@ -23,6 +23,7 @@ var page *ContactWebPage
 type ContactWebPage struct {
 	*PageData
 	Formatting      string
+	HomePage        string
 	Message         string
 	Input           UserInput
 	Success         bool
@@ -50,6 +51,10 @@ func (p *ContactWebPage) Init(localRootFolder string, pageDict *map[string]WebPa
 }
 
 func ContactWebPageHandler(w http.ResponseWriter, r *http.Request) {
+
+	if page.HomePage == "" {
+		page.HomePage = GetData((*page.PageDict)["index"], "UrlExtension", StringTypeArray).(string)
+	}
 
 	// Get captcha data
 	data := GetData((*page.PageDict)["captcha"], "UrlExtension", StringTypeArray)

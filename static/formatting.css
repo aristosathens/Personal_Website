@@ -7,6 +7,31 @@ body {
     max-width: 800px;
 }
 
+/* #centered_block_narrow {
+    margin: 0 auto;
+    max-width: 500px;
+} */
+#left {
+    float:left;
+    width:50%;
+}
+    #right {
+    float:right;
+    width:50%;
+    text-align:right
+}
+/* 
+#centered_block_narrow {
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    height: 30px; 
+} */
+
+/* #images{
+    text-align:center;
+} */
+
 #centered_element {
     left: 50%;
     text-align: center;
@@ -16,4 +41,9 @@ body {
 #bottom_page_text {
     font-size: 75%;
     /* color: rgb(185, 191, 192) */
+}
+
+#inline {
+    width: 15%;
+    color: blue;
 }

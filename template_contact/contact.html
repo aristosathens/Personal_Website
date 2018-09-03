@@ -5,35 +5,29 @@
     <link rel="stylesheet" type="text/css" href={{.Formatting}} media="screen" />
 </head>
 
+<!-- Clear all elements -->
+
 <script>
 	document.body.innerHTML = "";
 </script>
 
-
-<!-- forms.html -->
-<!-- <META HTTP-EQUIV="refresh" CONTENT="0.001"> -->
-	<!-- <META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE"> -->
-<!-- <div id="centered_block"> -->
-	{{if .Success}}
-		<h1>Thanks for your message!</h1>
-	{{else}}
-		<h1>Contact</h1>
-		<!-- <div style="display: inline-block; width: 20%;"> -->
-			<p>{{.Message}}</p>
-			<form method="POST">
-				<label>Email:</label><br />
-				<input type="text" size=50 name="email" value={{.Input.Email}}> <br />
-				<label>Subject:</label><br />
-				<input type="text" size=50 name="subject" value={{.Input.Subject}}> <br />
-				<label>Message:</label><br />
-				<textarea name="message" rows=10 cols=50>{{.Input.Message}}</textarea><br />
-				<label>Captcha:</label><br />
-				<input type="text" name="captcha"><br />
-				<input type="submit">
-			</form>
-		<!-- </div> -->
-		<!-- <div style="display: inline-block; width: 20%;"> -->
-			<p><img src={{.CaptchaLocation}}/></p>
-		<!-- </div> -->
-	{{end}}
-<!-- </div> -->
+<!-- Clear all elements -->
+{{if .Success}}
+	<h1>Thanks for your message!</h1>
+	<a href={{.HomePage}} rel="noopener">Home</a>
+{{else}}
+	<h1>Contact</h1>
+		<p>{{.Message}}</p>
+		<form method="POST">
+			<label>Email:</label><br />
+			<input type="text" size=50 name="email" value={{.Input.Email}}> <br />
+			<label>Subject:</label><br />
+			<input type="text" size=50 name="subject" value={{.Input.Subject}}> <br />
+			<label>Message:</label><br />
+			<textarea name="message" rows=10 cols=50>{{.Input.Message}}</textarea><br />
+			<label>Captcha:</label><br />
+			<input type="text" name="captcha"><br />
+			<input type="submit">
+		</form>
+		<p><img src={{.CaptchaLocation}}/></p>
+{{end}}

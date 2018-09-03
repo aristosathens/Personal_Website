@@ -6,7 +6,7 @@ import (
 	"reflect"
 )
 
-// ------------------------------------------- Definitions ------------------------------------------- //
+// ------------------------------------------- Types ------------------------------------------- //
 
 //
 // Commonly used reflect.Type objects
@@ -32,10 +32,10 @@ var StringTypeArray = []reflect.Type{
 // ------------------------------------------- Public ------------------------------------------- //
 
 //
-// Takes a page's struct or its pointer. Looks for field with matching name type
+// Takes a struct or its pointer. Looks for field with matching name type
 // Requires caller to know exact field name and set of possible types
 // It is up to the caller to check which of the requested types the returned value is
-// To use the returned value, use returnedValue.(type) to extract data
+// To use the returned value, use returnedValue.(<type>) to extract data
 //
 
 func GetData(p WebPageInterface, name string, requestedTypes []reflect.Type) interface{} {

@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// ------------------------------------------- Definitions ------------------------------------------- //
+// ------------------------------------------- Types ------------------------------------------- //
 
 //
 // IndexWebPage embeds the *WebPage type
@@ -27,6 +27,7 @@ type IndexWebPage struct {
 
 // ------------------------------------------- Public ------------------------------------------- //
 
+// Initiates page
 func (p *IndexWebPage) Init(localRootFolder string, pageDict *map[string]WebPageInterface) WebPageInterface {
 	p.PageData = NewWebPage("index", "home/", localRootFolder, pageDict, IndexWebPageHandler)
 	p.AristosPicture = p.UrlStaticFolder + "Aristos_Headshot.jpg"
@@ -35,9 +36,10 @@ func (p *IndexWebPage) Init(localRootFolder string, pageDict *map[string]WebPage
 	return p
 }
 
+// Implements page's behavior
 func IndexWebPageHandler(w http.ResponseWriter, r *http.Request) {
 
-	// If this is the first time, get data from resume page
+	// If this is the first time, get data from other pages
 	if page.ResumePage == "" {
 		page.ResumePage = GetData((*page.PageDict)["resume"], "UrlExtension", StringTypeArray).(string)
 		page.ContactPage = GetData((*page.PageDict)["contact"], "UrlExtension", StringTypeArray).(string)

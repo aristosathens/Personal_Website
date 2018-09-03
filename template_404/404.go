@@ -10,7 +10,7 @@ import (
 	// "strings"
 )
 
-// ------------------------------------------- Definitions ------------------------------------------- //
+// ------------------------------------------- Types ------------------------------------------- //
 
 //
 // FourZeroFourWebPage embeds the *WebPage type
@@ -30,6 +30,7 @@ type FourZeroFourWebPage struct {
 
 // ------------------------------------------- Public ------------------------------------------- //
 
+// Initiates page
 func (p *FourZeroFourWebPage) Init(localRootFolder string, pageDict *map[string]WebPageInterface) WebPageInterface {
 	p.PageData = NewWebPage("404", "", localRootFolder, pageDict, FourZeroFourWebPageWebPageHandler)
 	p.Formatting = p.UrlStaticFolder + "formatting.css"
@@ -39,7 +40,7 @@ func (p *FourZeroFourWebPage) Init(localRootFolder string, pageDict *map[string]
 	return p
 }
 
-// Implements page's behavior
+// Implements page's behavior. Writes status header, message, and link back to home
 func FourZeroFourWebPageWebPageHandler(w http.ResponseWriter, r *http.Request) {
 
 	// If this is the first time, get data from home page
@@ -61,15 +62,3 @@ func FourZeroFourWebPageWebPageHandler(w http.ResponseWriter, r *http.Request) {
 		log.Print("template executing error: ", err)
 	}
 }
-
-// ------------------------------------------- Private ------------------------------------------- //
-
-// func (p *FourZeroFourWebPage) checkHTAcessFile() {
-// 	htFilePath := p.LocalRootFolder + ".htaccess"
-// 	if _, err := os.Stat(htFilePath); os.IsExist(err) {
-// 		fileData, _ := ioutil.ReadFile(htFilePath)
-// 		strings.Contains(string(fileData))
-// 		fmt.Print(string(dat))
-// 		// path/to/whatever exists
-// 	}
-// }

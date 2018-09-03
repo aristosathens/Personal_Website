@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-// ------------------------------------------- Definitions ------------------------------------------- //
+// ------------------------------------------- Types ------------------------------------------- //
 
 //
 // CaptchaWebPage embeds the *WebPage type
@@ -24,13 +24,14 @@ type CaptchaWebPage struct {
 
 // ------------------------------------------- Public ------------------------------------------- //
 
+// Initiates page
 func (p *CaptchaWebPage) Init(localRootFolder string, pageDict *map[string]WebPageInterface) WebPageInterface {
 	p.PageData = NewWebPage("captcha", "captcha/", localRootFolder, pageDict, CaptchaWebPageHandler)
 	page = p
 	return p
 }
 
-// Implements page's behavior
+// Implements page's behavior. Generate new captcha and write png to ResponseWriter
 func CaptchaWebPageHandler(w http.ResponseWriter, r *http.Request) {
 	img, err := captcha.New(250, 75)
 	if err != nil {

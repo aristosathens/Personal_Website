@@ -8,36 +8,39 @@ import (
 	"strings"
 )
 
-// ------------------------------------------- Definitions ------------------------------------------- //
+// ------------------------------------------- Types ------------------------------------------- //
 
 //
-// All pages on the site are represented as structs that embed the PageData type.
-// Therefore we are guaranteed that every web page has the fields defined in the PageData type below.
-// The Handler function implements the page's behavior
-//
-
-type PageData struct {
-	Name            string                       // name
-	UrlExtension    string                       // full url extension
-	UrlSelfFolder   string                       // url extension of containing folder
-	UrlRootFolder   string                       // base url extension. Should be "/" or "/home/"
-	UrlStaticFolder string                       // url extension of folder containing static files
-	LocalRootFolder string                       // path of project's local (server) root directory
-	LocalSelfFolder string                       // path of local folder containing PageData implementation and html file
-	LocalHtmlFile   string                       // path of html file associated with this PageData
-	PageDict        *map[string]WebPageInterface // map of pointers to all other PageData structs
-	Handler         interface{}                  // function that handles http requests. the actual implementation of page's behavior
-}
-
-//
-// All pages must implement the WebPageInterface
+// All pages are represented as structs that implement WebPageInterface and embed the PageData type
 // Init should return a pointer to the page's struct
+// The string parameter is the localRootFolder
+// The map parameter is a map of all pages
 //
 
 type WebPageInterface interface {
 	Init(string, *map[string]WebPageInterface) WebPageInterface
 }
 
+//
+// All pages are represented as structs that implement WebPageInterface and embed the PageData type
+// Therefore we are guaranteed that every web page has the fields defined in the PageData type below
+// The Handler function implements the page's behavior
+//
+
+type PageData struct {
+	Name            string                       // name
+	Handler         interface{}                  // function that handles http requests. he actual implementation of page's behavior
+	PageDict        *map[string]WebPageInterface // map of pointers to all other PageData structs
+	UrlExtension    string                       // full url extension
+	UrlSelfFolder   string                       // url extension of containing folder
+	UrlRootFolder   string                       // base url extension. should be "/", "/index", or "/home/"
+	UrlStaticFolder string                       // url extension of folder containing static files
+	LocalRootFolder string                       // path of project's local (server) root directory
+	LocalSelfFolder string                       // path of local folder containing PageData implementation and html file
+	LocalHtmlFile   string                       // path of html file associated with this PageData
+}
+
+// Root folder on local machine (server)
 const urlRootFolder = "/"
 
 // ------------------------------------------- Public ------------------------------------------- //
@@ -55,7 +58,7 @@ func NewWebPage(pageName, urlExtension, localRootFolder string, pageDict *map[st
 	_, okHandler := handleFunc.(http.Handler)
 	_, okHandlerFunc := handleFunc.(func(http.ResponseWriter, *http.Request))
 	if !(okHandler || okHandlerFunc) {
-		err := errors.New("Invalid type for handleFunc")
+		err := errors.New("Invalid type for handleFunc.")
 		panic(err)
 	}
 	p.Handler = handleFunc
@@ -74,7 +77,7 @@ func Logging(f http.HandlerFunc) http.HandlerFunc {
 
 // ------------------------------------------- Private ------------------------------------------- //
 
-// All url extensions will end with "/", whether they are a folder or file
+// All url extensions will end with "/"
 func parseUrlExtension(p *PageData, urlExtension string) *PageData {
 
 	p.UrlExtension = p.UrlRootFolder + urlExtension

@@ -3,6 +3,13 @@
 <!-- Link to css file -->
 <head>
     <link rel="stylesheet" type="text/css" href={{.Formatting}} media="screen" />
+    <style>
+        img {
+            float: left;
+            /* border: 1px dotted black; */
+            /* margin: 0px 0px 15px 20px; */
+        }
+        </style>
 </head>
 
 
@@ -10,28 +17,32 @@
     <div id="centered_block">
 
         <h1><strong>Aristos Athens</strong></h1>
-
-        <h2>Bio</h2>
+        <div id="inline">
+            <div style="display: inline-block; width: 10%;"><a href="https://github.com/aristosathens" target="_blank" rel="noopener">Github</a></div>
+            <div style="display: inline-block; width: 10%;"><a href={{.ResumePage}} rel="noopener">Resume</a></div>
+            <div style="display: inline-block; width: 10%;"><a href="https://twitter.com/AristosAthens" target="_blank" rel="noopener">Twitter</a></div>
+            <div style="display: inline-block; width: 10%;"><a href={{.ContactPage}} rel="noopener">Contact</a></div>
+        </div>
         <hr />
-        <p>I'm a graduate student interested in biotech, robotics, and computer vision, among other things. Born in Texas, I've spent most of my life in California. My Greek name comes from my Greek dad! I am currently finishing an M.S. in Mechanical Engineering at Stanford University.</p>
-        <div id="centered_element">
-            <p><strong><img src={{.AristosPicture}} width=200 height=auto/></strong></p>
+        
+        <p>Graduate student interested in biotech, robotics, and computer vision, among other things. Born in Texas, spent most of my life in California. Currently finishing an M.S. in Mechanical Engineering at Stanford University.</p>
+        <hr />
+
+        <!-- <div id="centered_block_narrow"> -->
+        <div id="left">
+            <img src={{.AristosPicture}} width=200 height=auto/>
+        </div>
+        <div id="right">
             <p>Likes: Python, Go</p>
             <p>Dislikes: Runtime errors, Pickles</p>
         </div>
+</div>
 
-        <h2>Pages</h2>
-        <hr />
-        <div style="display: inline-block; width: 20%;">Pictures</div>
-        <div style="display: inline-block; width: 20%;"><a href="https://github.com/aristosathens" target="_blank" rel="noopener">Github</a></div>
-        <div style="display: inline-block; width: 20%;"><a href="https://twitter.com/AristosAthens" target="_blank" rel="noopener">Twitter</a></div>
-        <div style="display: inline-block; width: 20%;"><a href={{.ResumePage}} rel="noopener">Resume</a></div>
-        <div style="display: inline-block; width: 20%;"><a href={{.ContactPage}} rel="noopener">Contact</a></div>
-        <p>&nbsp;</p>
+ 
 
-        <div id="bottom_page_text">
+        <!-- <div id="bottom_page_text">
                 <p>This website was coded in Go.</p>
-        </div>
+        </div> -->
 
 
     </div>
