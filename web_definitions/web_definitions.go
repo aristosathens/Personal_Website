@@ -5,7 +5,6 @@ import (
 	// "fmt"
 	"log"
 	"net/http"
-	"reflect"
 	"strings"
 )
 
@@ -37,7 +36,6 @@ type PageData struct {
 
 type WebPageInterface interface {
 	Init(string, *map[string]WebPageInterface) WebPageInterface
-	// GetPageData() *PageData
 }
 
 const urlRootFolder = "/"
@@ -65,46 +63,13 @@ func NewWebPage(pageName, urlExtension, localRootFolder string, pageDict *map[st
 	return &p
 }
 
-// Takes pointer to a page's struct. Looks for field with matching name type
-// To use the returned value, call returnedValue.(type) to extract data
-func GetData(p WebPageInterface, name string, requestedTypes []reflect.Type) interface{} {
-
-	data := reflect.ValueOf(p).Elem().FieldByName(name)
-	if !data.IsValid() {
-		log.Fatal("Requested named data \"" + name + "\" does not exist.")
-	}
-	dataType := data.Type()
-
-	flag := false
-	for _, requestType := range requestedTypes {
-		if dataType == requestType {
-			flag = true
-			break
-		}
-	}
-	if flag == false {
-		log.Fatal("Requested wrong data type. Data named \"" + name + "\" had type: " + dataType.Name())
-	}
-
-	return data.Interface()
-}
-
 // Wrapper for HandlerFuncs. Adds logging but will otherwise produce functionality indentical to HandlerFunc
 func Logging(f http.HandlerFunc) http.HandlerFunc {
+
 	return func(w http.ResponseWriter, r *http.Request) {
 		log.Println(r.URL.Path)
 		f(w, r)
 	}
-}
-
-// Initializes all pages by calling the Init() function of each. Returns pointer to map
-// emptyPages will be populated with pointers to structs
-func GetAllPages(localRootFolder string, emptyPages *map[string]WebPageInterface) *map[string]WebPageInterface {
-
-	for name, emptyPage := range *emptyPages {
-		(*emptyPages)[name] = emptyPage.Init(localRootFolder, emptyPages)
-	}
-	return emptyPages
 }
 
 // ------------------------------------------- Private ------------------------------------------- //
@@ -121,13 +86,6 @@ func parseUrlExtension(p *PageData, urlExtension string) *PageData {
 	}
 	p.UrlSelfFolder = p.UrlExtension
 	p.UrlStaticFolder = p.UrlRootFolder + "static/"
-
-	// fmt.Println()
-	// fmt.Println(p.Name)
-	// fmt.Println("Self file: " + p.UrlExtension)
-	// fmt.Println("Self folder: " + p.UrlSelfFolder)
-	// fmt.Println("root folder: " + p.UrlRootFolder)
-	// fmt.Println("Static folder: " + p.UrlStaticFolder)
 
 	return p
 }

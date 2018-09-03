@@ -7,7 +7,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"reflect"
 	"strings"
 )
 
@@ -27,9 +26,7 @@ type ContactWebPage struct {
 	Message         string
 	Input           UserInput
 	Success         bool
-	PageUrls        map[string]string
 	CaptchaLocation string
-	Flag            bool
 }
 
 type UserInput struct {
@@ -46,28 +43,19 @@ const defaultMessage = "Character Limit: 1000"
 func (p *ContactWebPage) Init(localRootFolder string, pageDict *map[string]WebPageInterface) WebPageInterface {
 	p.PageData = NewWebPage("contact", "contact/", localRootFolder, pageDict, ContactWebPageHandler)
 	p.Message = defaultMessage
-	fmt.Println(p.PageUrls)
+	p.Input = UserInput{}
+	p.Formatting = p.UrlStaticFolder + "formatting.css"
 	page = p
 	return p
 }
 
-// func (p *ContactWebPage) GetPageData() *PageData {
-// 	return p.PageData
-// }
-
 func ContactWebPageHandler(w http.ResponseWriter, r *http.Request) {
 
-	// If this is the first time, initialize pageUrls. This can only occur after all WebPage structs have finished initializing
-	if page.PageUrls == nil {
-		// page.PageUrls = GetAllPageUrls(page.PageDict)
-	}
-	// Reset PageDataStruct to default values
-	page.Message = defaultMessage
-	page.Input = UserInput{}
-	page.Formatting = page.UrlStaticFolder + "formatting.css"
-
-	data := GetData((*page.PageDict)["captcha"], "UrlExtension", []reflect.Type{reflect.TypeOf((*string)(nil)).Elem()})
+	// Get captcha data
+	data := GetData((*page.PageDict)["captcha"], "UrlExtension", StringTypeArray)
 	page.CaptchaLocation = data.(string)
+	captchaValue := GetData((*page.PageDict)["captcha"], "CaptchaCode", StringTypeArray)
+	captchaText := captchaValue.(string)
 
 	// Create Golang http template from html file
 	t, err := template.ParseFiles(page.LocalHtmlFile)
@@ -89,25 +77,26 @@ func ContactWebPageHandler(w http.ResponseWriter, r *http.Request) {
 		Captcha: r.FormValue("captcha"),
 	}
 
-	captchaValue := GetData((*page.PageDict)["captcha"], "CaptchaCode", []reflect.Type{reflect.TypeOf((*string)(nil)).Elem()})
-	captchaText := captchaValue.(string)
-
-	if ok, msg := isValidInput(input, captchaText); !ok {
+	if len(input.Email) == 0 && len(input.Subject) == 0 && len(input.Message) == 0 && len(input.Captcha) == 0 {
+		// Default case. Do nothing
+		return
+	} else if ok, msg := isValidInput(input, captchaText); !ok {
 		page.Message = msg
 		page.Input = input
-		page.Flag = true
-		err = t.Execute(w, *page) //execute the template and pass it the HomePageVars struct to fill in the gaps
-		if err != nil {           // if there is an error
-			log.Print("template executing error: ", err) //log it
-		}
-		return
+	} else {
+		page.Success = true
 	}
 
-	// writeCaptcha(&w)
 	// generateAndSendEmail(input)
-	page.Success = true
+	// page.Success = true
 	t.Execute(w, *page)
-	// PageDataStruct.Message = defaultMessage
+
+	if page.Success == true {
+
+		// Reset data to default values
+		page.Message = defaultMessage
+		page.Success = false
+	}
 }
 
 // ------------------------------------------- Private ------------------------------------------- //
@@ -115,14 +104,23 @@ func ContactWebPageHandler(w http.ResponseWriter, r *http.Request) {
 // Checks if user provided valid inputs for fields in html form
 func isValidInput(input UserInput, captchaText string) (bool, string) {
 
+	fmt.Println("Captcha text: " + captchaText)
+	fmt.Println("User input: " + input.Captcha)
+
 	if !isValidEmail(input.Email) {
 		return false, "Invalid email."
+	}
+	if len(input.Subject) > 75 {
+		return false, "Please limit subject to 75 characters or less."
+	}
+	if len(input.Subject) < 1 {
+		return false, "Please include a subject."
 	}
 	if len(input.Message) > 1000 {
 		return false, "Please limit messages to 1000 characters or less."
 	}
-	if len(input.Subject) > 75 {
-		return false, "Please limit subject to 75 characters or less."
+	if len(input.Message) < 1 {
+		return false, "Please include a message."
 	}
 	if input.Captcha != strings.TrimSpace(captchaText) {
 		return false, "Incorrect captcha."

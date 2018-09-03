@@ -20,31 +20,28 @@ var page *IndexWebPage
 type IndexWebPage struct {
 	*PageData
 	Formatting     string
-	PageUrls       map[string]string
 	AristosPicture string
+	ResumePage     string
+	ContactPage    string
 }
 
 // ------------------------------------------- Public ------------------------------------------- //
 
 func (p *IndexWebPage) Init(localRootFolder string, pageDict *map[string]WebPageInterface) WebPageInterface {
-	p.PageData = NewWebPage("index", "", localRootFolder, pageDict, IndexWebPageHandler)
+	p.PageData = NewWebPage("index", "home/", localRootFolder, pageDict, IndexWebPageHandler)
+	p.AristosPicture = p.UrlStaticFolder + "Aristos_Headshot.jpg"
+	p.Formatting = p.UrlStaticFolder + "formatting.css"
 	page = p
 	return p
 }
 
-// func (p *IndexWebPage) GetPageData() *PageData {
-// 	return p.PageData
-// }
-
 func IndexWebPageHandler(w http.ResponseWriter, r *http.Request) {
 
-	// If this is the first call, initialize data. GetAllPageUrls() can only be called after all WebPage structs have finished initializing
-	if page.PageUrls == nil {
-		// page.PageUrls = GetAllPageUrls(page.PageDict)
-		page.AristosPicture = page.UrlStaticFolder + "Aristos_Headshot.jpg"
-		// page.Formatting = page.UrlStaticFolder + "formatting.css"
+	// If this is the first time, get data from resume page
+	if page.ResumePage == "" {
+		page.ResumePage = GetData((*page.PageDict)["resume"], "UrlExtension", StringTypeArray).(string)
+		page.ContactPage = GetData((*page.PageDict)["contact"], "UrlExtension", StringTypeArray).(string)
 	}
-	page.Formatting = page.UrlStaticFolder + "formatting.css"
 
 	// Create Golang http template from html file
 	t, err := template.ParseFiles(page.LocalHtmlFile)

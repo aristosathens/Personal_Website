@@ -30,13 +30,9 @@ func (p *CaptchaWebPage) Init(localRootFolder string, pageDict *map[string]WebPa
 	return p
 }
 
-// func (p *CaptchaWebPage) GetPageData() *PageData {
-// 	return p.PageData
-// }
-
 // Implements page's behavior
 func CaptchaWebPageHandler(w http.ResponseWriter, r *http.Request) {
-	img, err := captcha.New(150, 50)
+	img, err := captcha.New(250, 75)
 	if err != nil {
 		log.Print("Captcha creation error: ", err)
 		return

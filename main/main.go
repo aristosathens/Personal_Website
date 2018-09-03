@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Web/template_404"
 	"Web/template_captcha"
 	"Web/template_contact"
 	"Web/template_index"
@@ -18,15 +19,13 @@ import (
 // Location of project on local machine (server)
 var localRootFolder string
 
-// Map of pointers to web page structs. Array defined in template.go. Struct type defined in web_definitions.go
-// var pages *map[string]*WebPage
-
-// Map of empty page structs. Structs must implement WebPageInterface. Used to initialize pages struct above
+// Map of page structs. Structs must implement WebPageInterface
 var pages = &map[string]WebPageInterface{
 	"index":   &template_index.IndexWebPage{},
 	"resume":  &template_resume.ResumeWebPage{},
 	"captcha": &template_captcha.CaptchaWebPage{},
 	"contact": &template_contact.ContactWebPage{},
+	"404":     &template_404.FourZeroFourWebPage{},
 }
 
 // ------------------------------------------- Main ------------------------------------------- //
@@ -40,33 +39,28 @@ func init() {
 	// Get project directory on local machine (server)
 	localRootFolder, _ = filepath.Abs(filepath.Dir(os.Args[0]))
 
-	// Generate all web page objects
-	pages = GetAllPages(localRootFolder, pages)
+	// Initializes all pages by calling the Init() function of each.
+	for name, emptyPage := range *pages {
+		(*pages)[name] = emptyPage.Init(localRootFolder, pages)
+	}
 
 	// Set up the handler for each page. This can only be done when all pages are finished initializing.
 	for _, page := range *pages {
-		data := GetData(page, "Handler", reflect.TypeOf((*string)(nil)).Elem())
-		page.CaptchaLocation = data.(string)
-		data := 
-		data := page.GetPageData()
+		handler := GetData(page, "Handler", HandlerTypeArray)
+		name := GetData(page, "Name", StringTypeArray).(string)
+		url := GetData(page, "UrlExtension", StringTypeArray).(string)
 
-		_, isPlainHandler := page.GetPageData().Handler.(http.Handler)
+		_, isPlainHandler := handler.(http.Handler)
 		if isPlainHandler {
-			http.Handle("/template_"+data.Name+"/", data.Handler.(http.Handler))
+			http.Handle("/template_"+name+"/", handler.(http.Handler))
 		} else {
-			http.HandleFunc(data.UrlExtension, data.Handler.(func(http.ResponseWriter, *http.Request)))
+			http.HandleFunc(url, handler.(func(http.ResponseWriter, *http.Request)))
 		}
 	}
-
 }
 
 func main() {
 
 	// Start http server
 	log.Fatal(http.ListenAndServe(":3000", nil))
-
-	// r := mux.NewRouter()
-
 }
-
-// ------------------------------------------- Private ------------------------------------------- //
