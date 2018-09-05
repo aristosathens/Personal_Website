@@ -3,11 +3,8 @@ package template_404
 import (
 	. "Web/web_definitions"
 	"html/template"
-	// "io/ioutil"
 	"log"
 	"net/http"
-	// "os"
-	// "strings"
 )
 
 // ------------------------------------------- Types ------------------------------------------- //
@@ -48,6 +45,13 @@ func (p *FourZeroFourWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 	// If this is the first time, get data from home page
 	if p.HomePage == "" {
 		p.HomePage = (*p.PageDict)["index"].Data().UrlExtension
+	}
+
+	// If url matches, redirect to home page
+	url := r.URL.String()
+	if url == "/" || url == "/main" || url == "/main/" || url == "/home" || url == "/home/" {
+		http.Redirect(w, r, p.HomePage, 301)
+		return
 	}
 
 	w.WriteHeader(http.StatusNotFound)

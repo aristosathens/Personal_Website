@@ -7,7 +7,6 @@ import (
 	"Web/template_index"
 	"Web/template_resume"
 	. "Web/web_definitions"
-	// "fmt"
 	"log"
 	"net/http"
 	"os"
@@ -42,12 +41,14 @@ func init() {
 	// Get project directory on local machine (server)
 	localRootFolder, _ = filepath.Abs(filepath.Dir(os.Args[0]))
 
-	// Initializes all pages by calling the Init() function of each.
+	// Initialize (mostly) empty PageData struct
 	baseData := PageData{
 		LocalRootFolder: localRootFolder,
 		UrlRootFolder:   urlRootFolder,
 		PageDict:        pages,
 	}
+
+	// Initializes all pages by calling the Init() function of each.
 	for name, emptyPage := range *pages {
 		(*pages)[name] = emptyPage.Init(baseData)
 	}
@@ -55,16 +56,11 @@ func init() {
 	// Set up the handler for each page. This can only be done when all pages are finished initializing.
 	for _, page := range *pages {
 		handler := page.Data().Handler
-		name := page.Data().Name
 		url := page.Data().UrlExtension
-
-		_, isPlainHandler := handler.(http.Handler)
-		if isPlainHandler {
-			http.Handle("/template_"+name+"/", handler.(http.Handler))
-		} else {
-			http.HandleFunc(url, handler.(func(http.ResponseWriter, *http.Request)))
-		}
+		http.HandleFunc(url, handler.(func(http.ResponseWriter, *http.Request)))
 	}
+
+	// Set up handler
 }
 
 func main() {
@@ -72,3 +68,5 @@ func main() {
 	// Start http server
 	log.Fatal(http.ListenAndServe(":3000", nil))
 }
+
+// ------------------------------------------- Private ------------------------------------------- //

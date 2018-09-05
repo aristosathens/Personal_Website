@@ -23,6 +23,7 @@ type ContactWebPage struct {
 	Formatting      string
 	HomePage        string
 	Message         string
+	DefaultMessage  string
 	Input           UserInput
 	Success         bool
 	CaptchaLocation string
@@ -35,14 +36,13 @@ type UserInput struct {
 	Captcha string
 }
 
-const defaultMessage = "Character Limit: 1000"
-
 // ------------------------------------------- Public ------------------------------------------- //
 
 // Initializes page
 func (p *ContactWebPage) Init(baseData PageData) WebPageInterface {
 	p.PageData = NewWebPage(baseData, "contact", "contact/", p.Handler)
-	p.Message = defaultMessage
+	p.DefaultMessage = "Character Limit: 1000"
+	p.Message = p.DefaultMessage
 	p.Input = UserInput{}
 	p.Formatting = p.UrlStaticFolder + "formatting.css"
 	return p
@@ -87,7 +87,6 @@ func (p *ContactWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(input.Email) == 0 && len(input.Subject) == 0 && len(input.Message) == 0 && len(input.Captcha) == 0 {
-		// Default case. Do nothing
 		return
 	} else if ok, msg := isValidInput(input, captchaText); !ok {
 		p.Message = msg
@@ -101,7 +100,7 @@ func (p *ContactWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 
 	if p.Success == true {
 		// Reset data to default values
-		p.Message = defaultMessage
+		p.Message = p.DefaultMessage
 		p.Success = false
 	}
 }

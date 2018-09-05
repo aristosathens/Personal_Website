@@ -2,7 +2,6 @@ package web_definitions
 
 import (
 	"errors"
-	// "fmt"
 	"log"
 	"net/http"
 	"strings"
