@@ -12,19 +12,18 @@ import (
 
 //
 // All pages are represented as structs that implement WebPageInterface and embed the PageData type
-// Init should return a pointer to the page's struct
-// The string parameter is the localRootFolder
-// The map parameter is a map of all pages
+// Init() should return a pointer to the page's struct. Takes a (mostly) empty PageData object
+// Data() exposes the PageData fields embedded in all page structs
 //
 
 type WebPageInterface interface {
-	Init(string, *map[string]WebPageInterface) WebPageInterface
+	Init(PageData) WebPageInterface
+	Data() *PageData
 }
 
 //
 // All pages are represented as structs that implement WebPageInterface and embed the PageData type
-// Therefore we are guaranteed that every web page has the fields defined in the PageData type below
-// The Handler function implements the page's behavior
+// Every page has the fields defined in the PageData type below. Access them with Data() method
 //
 
 type PageData struct {
@@ -40,19 +39,14 @@ type PageData struct {
 	LocalHtmlFile   string                       // path of html file associated with this PageData
 }
 
-// Root folder on local machine (server)
-const urlRootFolder = "/"
-
 // ------------------------------------------- Public ------------------------------------------- //
 
 // Creates new PageData struct and populates its fields
-func NewWebPage(pageName, urlExtension, localRootFolder string, pageDict *map[string]WebPageInterface, handleFunc interface{}) *PageData {
-	p := PageData{}
+func NewWebPage(p PageData, pageName, urlExtension string, handleFunc interface{}) *PageData {
+	// p := PageData{}
 	p.Name = pageName
-	p.UrlRootFolder = urlRootFolder
 	p = *parseUrlExtension(&p, urlExtension)
-	p = *parseLocalFolder(&p, localRootFolder)
-	p.PageDict = pageDict
+	p = *parseLocalFolder(&p, p.LocalRootFolder)
 
 	// Ensure that handleFunc is one of the two legal types
 	_, okHandler := handleFunc.(http.Handler)

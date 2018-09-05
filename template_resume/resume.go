@@ -15,8 +15,6 @@ import (
 // More details in web_definitions.go
 //
 
-var page *ResumeWebPage
-
 type ResumeWebPage struct {
 	*PageData
 	Formatting string
@@ -25,26 +23,30 @@ type ResumeWebPage struct {
 
 // ------------------------------------------- Public ------------------------------------------- //
 
-// Initiates page
-func (p *ResumeWebPage) Init(localRootFolder string, pageDict *map[string]WebPageInterface) WebPageInterface {
-	p.PageData = NewWebPage("resume", "resume/", localRootFolder, pageDict, ResumeWebPageHandler)
+// Initializes page
+func (p *ResumeWebPage) Init(baseData PageData) WebPageInterface {
+	p.PageData = NewWebPage(baseData, "resume", "resume/", p.Handler)
 	p.Formatting = p.UrlStaticFolder + "formatting.css"
 	p.Resume = "https://drive.google.com/file/d/1geuuG-Qh_QUTOzkkgZ_z7nsa_SVhwv5f/preview"
-	page = p
 	return p
 }
 
+// Expose common data fields
+func (p *ResumeWebPage) Data() *PageData {
+	return p.PageData
+}
+
 // Implements page's behavior
-func ResumeWebPageHandler(w http.ResponseWriter, r *http.Request) {
+func (p *ResumeWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 
 	// Create Golang http template from html file
-	t, err := template.ParseFiles(page.LocalHtmlFile)
+	t, err := template.ParseFiles(p.LocalHtmlFile)
 	if err != nil {
 		log.Print("template parsing error: ", err)
 	}
 
 	// Pass in the page's data and execute the template
-	err = t.Execute(w, *page)
+	err = t.Execute(w, *p)
 	if err != nil {
 		log.Print("template executing error: ", err)
 	}

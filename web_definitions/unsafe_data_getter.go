@@ -36,6 +36,7 @@ var StringTypeArray = []reflect.Type{
 // Requires caller to know exact field name and set of possible types
 // It is up to the caller to check which of the requested types the returned value is
 // To use the returned value, use returnedValue.(<type>) to extract data
+// This is UNSAFE. Only use if necessary. This can cause run-time erros (errors compiler will not catch)
 //
 
 func GetData(p WebPageInterface, name string, requestedTypes []reflect.Type) interface{} {

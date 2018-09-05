@@ -19,7 +19,10 @@ import (
 // Location of project on local machine (server)
 var localRootFolder string
 
-// Map of page structs. Structs must implement WebPageInterface
+// Url root folder. Should be "/", "/home/", or "/main/"
+const urlRootFolder = "/"
+
+// Pointer to map of page structs. Structs must implement WebPageInterface
 var pages = &map[string]WebPageInterface{
 	"index":   &template_index.IndexWebPage{},
 	"resume":  &template_resume.ResumeWebPage{},
@@ -40,15 +43,20 @@ func init() {
 	localRootFolder, _ = filepath.Abs(filepath.Dir(os.Args[0]))
 
 	// Initializes all pages by calling the Init() function of each.
+	baseData := PageData{
+		LocalRootFolder: localRootFolder,
+		UrlRootFolder:   urlRootFolder,
+		PageDict:        pages,
+	}
 	for name, emptyPage := range *pages {
-		(*pages)[name] = emptyPage.Init(localRootFolder, pages)
+		(*pages)[name] = emptyPage.Init(baseData)
 	}
 
 	// Set up the handler for each page. This can only be done when all pages are finished initializing.
 	for _, page := range *pages {
-		handler := GetData(page, "Handler", HandlerTypeArray)
-		name := GetData(page, "Name", StringTypeArray).(string)
-		url := GetData(page, "UrlExtension", StringTypeArray).(string)
+		handler := page.Data().Handler
+		name := page.Data().Name
+		url := page.Data().UrlExtension
 
 		_, isPlainHandler := handler.(http.Handler)
 		if isPlainHandler {

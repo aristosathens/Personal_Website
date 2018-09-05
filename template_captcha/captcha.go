@@ -15,8 +15,6 @@ import (
 // More details in web_definitions.go
 //
 
-var page *CaptchaWebPage
-
 type CaptchaWebPage struct {
 	*PageData
 	CaptchaCode string
@@ -24,20 +22,24 @@ type CaptchaWebPage struct {
 
 // ------------------------------------------- Public ------------------------------------------- //
 
-// Initiates page
-func (p *CaptchaWebPage) Init(localRootFolder string, pageDict *map[string]WebPageInterface) WebPageInterface {
-	p.PageData = NewWebPage("captcha", "captcha/", localRootFolder, pageDict, CaptchaWebPageHandler)
-	page = p
+// Initializes page
+func (p *CaptchaWebPage) Init(baseData PageData) WebPageInterface {
+	p.PageData = NewWebPage(baseData, "captcha", "captcha/", p.Handler)
 	return p
 }
 
+// Expose common data fields
+func (p *CaptchaWebPage) Data() *PageData {
+	return p.PageData
+}
+
 // Implements page's behavior. Generate new captcha and write png to ResponseWriter
-func CaptchaWebPageHandler(w http.ResponseWriter, r *http.Request) {
+func (p *CaptchaWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 	img, err := captcha.New(250, 75)
 	if err != nil {
 		log.Print("Captcha creation error: ", err)
 		return
 	}
-	page.CaptchaCode = img.Text
+	p.CaptchaCode = img.Text
 	img.WriteImage(w)
 }

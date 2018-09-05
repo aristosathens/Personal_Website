@@ -18,8 +18,6 @@ import (
 // More details in web_definitions.go
 //
 
-var page *ContactWebPage
-
 type ContactWebPage struct {
 	*PageData
 	Formatting      string
@@ -41,35 +39,41 @@ const defaultMessage = "Character Limit: 1000"
 
 // ------------------------------------------- Public ------------------------------------------- //
 
-func (p *ContactWebPage) Init(localRootFolder string, pageDict *map[string]WebPageInterface) WebPageInterface {
-	p.PageData = NewWebPage("contact", "contact/", localRootFolder, pageDict, ContactWebPageHandler)
+// Initializes page
+func (p *ContactWebPage) Init(baseData PageData) WebPageInterface {
+	p.PageData = NewWebPage(baseData, "contact", "contact/", p.Handler)
 	p.Message = defaultMessage
 	p.Input = UserInput{}
 	p.Formatting = p.UrlStaticFolder + "formatting.css"
-	page = p
 	return p
 }
 
-func ContactWebPageHandler(w http.ResponseWriter, r *http.Request) {
+// Expose common data fields
+func (p *ContactWebPage) Data() *PageData {
+	return p.PageData
+}
 
-	if page.HomePage == "" {
-		page.HomePage = GetData((*page.PageDict)["index"], "UrlExtension", StringTypeArray).(string)
+// Implements page's behavior
+func (p *ContactWebPage) Handler(w http.ResponseWriter, r *http.Request) {
+
+	if p.HomePage == "" {
+		p.HomePage = (*p.PageDict)["index"].Data().UrlExtension
 	}
 
 	// Get captcha data
-	data := GetData((*page.PageDict)["captcha"], "UrlExtension", StringTypeArray)
-	page.CaptchaLocation = data.(string)
-	captchaValue := GetData((*page.PageDict)["captcha"], "CaptchaCode", StringTypeArray)
+	p.CaptchaLocation = (*p.PageDict)["captcha"].Data().UrlExtension
+
+	captchaValue := GetData((*p.PageDict)["captcha"], "CaptchaCode", StringTypeArray)
 	captchaText := captchaValue.(string)
 
 	// Create Golang http template from html file
-	t, err := template.ParseFiles(page.LocalHtmlFile)
+	t, err := template.ParseFiles(p.LocalHtmlFile)
 	if err != nil {
 		log.Print("template parsing error: ", err)
 	}
 
 	// Pass in the page's data and execute the template
-	err = t.Execute(w, *page)
+	err = t.Execute(w, *p)
 	if err != nil {
 		log.Print("template executing error: ", err)
 	}
@@ -86,21 +90,19 @@ func ContactWebPageHandler(w http.ResponseWriter, r *http.Request) {
 		// Default case. Do nothing
 		return
 	} else if ok, msg := isValidInput(input, captchaText); !ok {
-		page.Message = msg
-		page.Input = input
+		p.Message = msg
+		p.Input = input
 	} else {
-		page.Success = true
+		p.Success = true
+		generateAndSendEmail(input)
 	}
 
-	// generateAndSendEmail(input)
-	// page.Success = true
-	t.Execute(w, *page)
+	t.Execute(w, *p)
 
-	if page.Success == true {
-
+	if p.Success == true {
 		// Reset data to default values
-		page.Message = defaultMessage
-		page.Success = false
+		p.Message = defaultMessage
+		p.Success = false
 	}
 }
 
