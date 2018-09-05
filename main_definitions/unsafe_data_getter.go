@@ -1,4 +1,4 @@
-package web_definitions
+package main_definitions
 
 import (
 	"log"

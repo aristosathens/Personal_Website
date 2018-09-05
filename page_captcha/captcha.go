@@ -1,7 +1,7 @@
-package template_captcha
+package page_captcha
 
 import (
-	. "Web/web_definitions"
+	. "Web/main_definitions"
 	"github.com/steambap/captcha"
 	"log"
 	"net/http"

@@ -1,7 +1,7 @@
-package template_404
+package page_404
 
 import (
-	. "Web/web_definitions"
+	. "Web/main_definitions"
 	"html/template"
 	"log"
 	"net/http"
@@ -52,19 +52,21 @@ func (p *FourZeroFourWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 	if url == "/" || url == "/main" || url == "/main/" || url == "/home" || url == "/home/" {
 		http.Redirect(w, r, p.HomePage, 301)
 		return
-	}
+	} else if url[len(url)-5:] == "/404/" || url[len(url)-4:] == "/404" {
+		w.WriteHeader(http.StatusNotFound)
 
-	w.WriteHeader(http.StatusNotFound)
+		// Create Golang http template from html file
+		t, err := template.ParseFiles(p.LocalHtmlFile)
+		if err != nil {
+			log.Print("template parsing error: ", err)
+		}
 
-	// Create Golang http template from html file
-	t, err := template.ParseFiles(p.LocalHtmlFile)
-	if err != nil {
-		log.Print("template parsing error: ", err)
-	}
-
-	// Pass in the page's data and execute the template
-	err = t.Execute(w, *p)
-	if err != nil {
-		log.Print("template executing error: ", err)
+		// Pass in the page's data and execute the template
+		err = t.Execute(w, *p)
+		if err != nil {
+			log.Print("template executing error: ", err)
+		}
+	} else {
+		http.Redirect(w, r, "/404/", 301)
 	}
 }

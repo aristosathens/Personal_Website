@@ -1,7 +1,7 @@
-package template_contact
+package page_contact
 
 import (
-	. "Web/web_definitions"
+	. "Web/main_definitions"
 	"fmt"
 	"gopkg.in/gomail.v2"
 	"html/template"

@@ -1,7 +1,7 @@
-package template_index
+package page_index
 
 import (
-	. "Web/web_definitions"
+	. "Web/main_definitions"
 	"html/template"
 	"log"
 	"net/http"

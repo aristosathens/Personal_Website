@@ -1,12 +1,12 @@
 package main
 
 import (
-	"Web/template_404"
-	"Web/template_captcha"
-	"Web/template_contact"
-	"Web/template_index"
-	"Web/template_resume"
-	. "Web/web_definitions"
+	. "Web/main_definitions"
+	"Web/page_404"
+	"Web/page_captcha"
+	"Web/page_contact"
+	"Web/page_index"
+	"Web/page_resume"
 	"log"
 	"net/http"
 	"os"
@@ -23,11 +23,11 @@ const urlRootFolder = "/"
 
 // Pointer to map of page structs. Structs must implement WebPageInterface
 var pages = &map[string]WebPageInterface{
-	"index":   &template_index.IndexWebPage{},
-	"resume":  &template_resume.ResumeWebPage{},
-	"captcha": &template_captcha.CaptchaWebPage{},
-	"contact": &template_contact.ContactWebPage{},
-	"404":     &template_404.FourZeroFourWebPage{},
+	"index":   &page_index.IndexWebPage{},
+	"resume":  &page_resume.ResumeWebPage{},
+	"captcha": &page_captcha.CaptchaWebPage{},
+	"contact": &page_contact.ContactWebPage{},
+	"404":     &page_404.FourZeroFourWebPage{},
 }
 
 // ------------------------------------------- Main ------------------------------------------- //

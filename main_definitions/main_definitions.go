@@ -1,4 +1,4 @@
-package web_definitions
+package main_definitions
 
 import (
 	"errors"
@@ -27,8 +27,8 @@ type WebPageInterface interface {
 
 type PageData struct {
 	Name            string                       // name
-	Handler         interface{}                  // function that handles http requests. he actual implementation of page's behavior
-	PageDict        *map[string]WebPageInterface // map of pointers to all other PageData structs
+	Handler         interface{}                  // function that handles http requests. The actual implementation of page's behavior
+	PageDict        *map[string]WebPageInterface // map of pointers to all other page structs
 	UrlExtension    string                       // full url extension
 	UrlSelfFolder   string                       // url extension of containing folder
 	UrlRootFolder   string                       // base url extension. should be "/", "/index", or "/home/"
@@ -40,17 +40,16 @@ type PageData struct {
 
 // ------------------------------------------- Public ------------------------------------------- //
 
-// Creates new PageData struct and populates its fields
+// Takes (mostly) empty PageData struct and populates its fields
 func NewWebPage(p PageData, pageName, urlExtension string, handleFunc interface{}) *PageData {
-	// p := PageData{}
 	p.Name = pageName
 	p = *parseUrlExtension(&p, urlExtension)
 	p = *parseLocalFolder(&p, p.LocalRootFolder)
 
 	// Ensure that handleFunc is one of the two legal types
-	_, okHandler := handleFunc.(http.Handler)
+	// _, okHandler := handleFunc.(http.Handler)
 	_, okHandlerFunc := handleFunc.(func(http.ResponseWriter, *http.Request))
-	if !(okHandler || okHandlerFunc) {
+	if !(okHandlerFunc) {
 		err := errors.New("Invalid type for handleFunc.")
 		panic(err)
 	}
@@ -93,7 +92,7 @@ func parseLocalFolder(p *PageData, rootFolder string) *PageData {
 		rootFolder += "\\"
 	}
 	p.LocalRootFolder = rootFolder
-	p.LocalSelfFolder = rootFolder + "template_" + p.Name + "\\"
+	p.LocalSelfFolder = rootFolder + "page_" + p.Name + "\\"
 	p.LocalHtmlFile = p.LocalSelfFolder + p.Name + ".html"
 
 	return p

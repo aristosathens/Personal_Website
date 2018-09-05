@@ -1,7 +1,7 @@
-package template_resume
+package page_resume
 
 import (
-	. "Web/web_definitions"
+	. "Web/main_definitions"
 	"html/template"
 	"log"
 	"net/http"
