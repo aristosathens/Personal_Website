@@ -42,6 +42,8 @@ func init() {
 	// Get project directory on local machine (server)
 	localRootFolder, _ = filepath.Abs(filepath.Dir(os.Args[0]))
 
+	fmt.Println("LOCAL ROOT IS: " + localRootFolder)
+
 	// Initialize (mostly) empty PageData struct
 	baseData := PageData{
 		LocalRootFolder: localRootFolder,
