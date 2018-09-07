@@ -7,6 +7,7 @@ import (
 	"Web/page_contact"
 	"Web/page_index"
 	"Web/page_resume"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -60,14 +61,18 @@ func init() {
 		http.HandleFunc(url, handler.(func(http.ResponseWriter, *http.Request)))
 	}
 
+	fmt.Println("Finished init in main.")
 	// Set up handler
 }
 
 func main() {
 
+	fmt.Println("Running main in main.")
+
 	// Start http server
 	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
 	// log.Fatal(http.ListenAndServe(":3000", nil))
+
 }
 
 // ------------------------------------------- Private ------------------------------------------- //
