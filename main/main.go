@@ -66,7 +66,8 @@ func init() {
 func main() {
 
 	// Start http server
-	log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
+	// log.Fatal(http.ListenAndServe(":3000", nil))
 }
 
 // ------------------------------------------- Private ------------------------------------------- //
