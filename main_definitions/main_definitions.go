@@ -4,6 +4,7 @@ import (
 	"errors"
 	"log"
 	"net/http"
+	"runtime"
 	"strings"
 )
 
@@ -86,14 +87,21 @@ func parseUrlExtension(p *PageData, urlExtension string) *PageData {
 	return p
 }
 
-// All local folders will end with "\\". Do not use "/"
+// All local folders will end with "\\" in windows, "/" else
 func parseLocalFolder(p *PageData, rootFolder string) *PageData {
 
-	if rootFolder[len(rootFolder)-1:] != "/" {
-		rootFolder += "/"
+	var fileSeperator string
+	if runtime.GOOS == "windows" {
+		fileSeperator = "\\"
+	} else {
+		fileSeperator = "/"
+	}
+
+	if rootFolder[len(rootFolder)-1:] != fileSeperator {
+		rootFolder += fileSeperator
 	}
 	p.LocalRootFolder = rootFolder
-	p.LocalSelfFolder = rootFolder + "page_" + p.Name + "/"
+	p.LocalSelfFolder = rootFolder + "page_" + p.Name + fileSeperator
 	p.LocalHtmlFile = p.LocalSelfFolder + p.Name + ".html"
 
 	return p
