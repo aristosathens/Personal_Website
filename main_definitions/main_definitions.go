@@ -89,11 +89,11 @@ func parseUrlExtension(p *PageData, urlExtension string) *PageData {
 // All local folders will end with "\\". Do not use "/"
 func parseLocalFolder(p *PageData, rootFolder string) *PageData {
 
-	if rootFolder[len(rootFolder)-1:] != "\\" {
-		rootFolder += "\\"
+	if rootFolder[len(rootFolder)-1:] != "/" {
+		rootFolder += "/"
 	}
 	p.LocalRootFolder = rootFolder
-	p.LocalSelfFolder = rootFolder + "page_" + p.Name + "\\"
+	p.LocalSelfFolder = rootFolder + "page_" + p.Name + "/"
 	p.LocalHtmlFile = p.LocalSelfFolder + p.Name + ".html"
 
 	return p
