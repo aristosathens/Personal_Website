@@ -42,6 +42,7 @@ type PageData struct {
 
 // Takes (mostly) empty PageData struct and populates its fields
 func NewWebPage(p PageData, pageName, urlExtension string, handleFunc interface{}) *PageData {
+
 	p.Name = pageName
 	p = *parseUrlExtension(&p, urlExtension)
 	p = *parseLocalFolder(&p, p.LocalRootFolder)

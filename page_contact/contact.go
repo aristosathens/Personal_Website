@@ -56,13 +56,13 @@ func (p *ContactWebPage) Data() *PageData {
 // Implements page's behavior
 func (p *ContactWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 
+	// If this is the first time, get data from other pages
 	if p.HomePage == "" {
 		p.HomePage = (*p.PageDict)["index"].Data().UrlExtension
+		p.CaptchaLocation = (*p.PageDict)["captcha"].Data().UrlExtension
 	}
 
-	// Get captcha data
-	p.CaptchaLocation = (*p.PageDict)["captcha"].Data().UrlExtension
-
+	// Get new captcha data
 	captchaValue := GetData((*p.PageDict)["captcha"], "CaptchaCode", StringTypeArray)
 	captchaText := captchaValue.(string)
 
@@ -85,8 +85,11 @@ func (p *ContactWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 		Message: r.FormValue("message"),
 		Captcha: r.FormValue("captcha"),
 	}
+	fmt.Println(input)
 
+	// 3 paths: Empty input, bad input, valid input
 	if len(input.Email) == 0 && len(input.Subject) == 0 && len(input.Message) == 0 && len(input.Captcha) == 0 {
+		fmt.Println("here")
 		return
 	} else if ok, msg := isValidInput(input, captchaText); !ok {
 		p.Message = msg
@@ -95,11 +98,10 @@ func (p *ContactWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 		p.Success = true
 		generateAndSendEmail(input)
 	}
-
 	t.Execute(w, *p)
 
+	// Reset data to default values
 	if p.Success == true {
-		// Reset data to default values
 		p.Message = p.DefaultMessage
 		p.Success = false
 	}
@@ -152,6 +154,7 @@ func isValidEmail(input string) bool {
 
 // Populates the fields of an email and sends it to me from a dummy account
 func generateAndSendEmail(input UserInput) {
+
 	m := gomail.NewMessage()
 	m.SetHeader("From", "Aristos.Website@gmail.com")
 	m.SetHeader("To", "aristos.a.athens@gmail.com")

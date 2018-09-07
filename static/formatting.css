@@ -7,10 +7,10 @@ body {
     max-width: 800px;
 }
 
-/* #centered_block_narrow {
+#centered_block_narrow {
     margin: 0 auto;
     max-width: 500px;
-} */
+}
 #left {
     float:left;
     width:50%;

@@ -1,0 +1,43 @@
+{
+	"ImportPath": "Web",
+	"GoVersion": "go1.10",
+	"GodepVersion": "v80",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/golang/freetype",
+			"Comment": "release-137-ge2365df",
+			"Rev": "e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4"
+		},
+		{
+			"ImportPath": "github.com/golang/freetype/raster",
+			"Comment": "release-137-ge2365df",
+			"Rev": "e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4"
+		},
+		{
+			"ImportPath": "github.com/golang/freetype/truetype",
+			"Comment": "release-137-ge2365df",
+			"Rev": "e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4"
+		},
+		{
+			"ImportPath": "github.com/steambap/captcha",
+			"Comment": "v1.2.0-6-g1b36f64",
+			"Rev": "1b36f64f5d6b8a12019ea21ee45832f13e5c82bc"
+		},
+		{
+			"ImportPath": "golang.org/x/image/font",
+			"Rev": "c73c2afc3b812cdd6385de5a50616511c4a3d458"
+		},
+		{
+			"ImportPath": "golang.org/x/image/math/fixed",
+			"Rev": "c73c2afc3b812cdd6385de5a50616511c4a3d458"
+		},
+		{
+			"ImportPath": "gopkg.in/gomail.v2",
+			"Comment": "2.0.0-23-g81ebce5",
+			"Rev": "81ebce5c23dfd25c6c67194b37d3dd3f338c98b1"
+		}
+	]
+}
