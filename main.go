@@ -74,6 +74,7 @@ func main() {
 	if runtime.GOOS == "windows" {
 		port = ":3000"
 	} else {
+		fmt.Println("HERE HERE HERE")
 		port = ":" + os.Getenv("PORT)")
 	}
 
