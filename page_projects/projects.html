@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+<!-- Link to css file -->
+<head>
+    <link rel="stylesheet" type="text/css" href={{.Formatting}} media="screen" />
+</head>
+
+<!-- Clear all elements -->
+<script>
+	document.body.innerHTML = "";
+</script>
+
+
+<body>
+    <div id="centered_block">
+
+        <h1><strong>Projects</strong></h1>
+        {{range .Projects}}
+            <div style="display: inline-block; width: 15%;"><a href={{.Name}} rel="noopener">{{.Name}}</a></div>
+        {{end}}
+        <hr />
+        
+        <!-- <p>Graduate student interested in biotech, robotics, and computer vision, among other things. Born in Texas, spent most of my life in California. Currently finishing an M.S. in Mechanical Engineering at Stanford University.</p>
+        <hr />
+        <p></p> -->
+    </div>
+</body>

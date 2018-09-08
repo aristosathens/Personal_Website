@@ -6,12 +6,16 @@ import (
 	"Web/page_captcha"
 	"Web/page_contact"
 	"Web/page_index"
+	"Web/page_projects"
 	"Web/page_resume"
+
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path/filepath"
+	"runtime"
 )
 
 // ------------------------------------------- Definitions ------------------------------------------- //
@@ -24,11 +28,12 @@ const urlRootFolder = "/"
 
 // Pointer to map of page structs. Structs must implement WebPageInterface
 var pages = &map[string]WebPageInterface{
-	"index":   &page_index.IndexWebPage{},
-	"resume":  &page_resume.ResumeWebPage{},
-	"captcha": &page_captcha.CaptchaWebPage{},
-	"contact": &page_contact.ContactWebPage{},
-	"404":     &page_404.FourZeroFourWebPage{},
+	"index":    &page_index.IndexWebPage{},
+	"resume":   &page_resume.ResumeWebPage{},
+	"captcha":  &page_captcha.CaptchaWebPage{},
+	"contact":  &page_contact.ContactWebPage{},
+	"404":      &page_404.FourZeroFourWebPage{},
+	"projects": &page_projects.ProjectsWebPage{},
 }
 
 // ------------------------------------------- Main ------------------------------------------- //
@@ -36,13 +41,10 @@ var pages = &map[string]WebPageInterface{
 func init() {
 
 	// Set up handler for serving static files
-	staticFileServer := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
-	http.Handle("/static/", staticFileServer)
+	serveAllStatic()
 
 	// Get project directory on local machine (server)
 	localRootFolder, _ = filepath.Abs(filepath.Dir(os.Args[0]))
-
-	fmt.Println("LOCAL ROOT IS: " + localRootFolder)
 
 	// Initialize (mostly) empty PageData struct
 	baseData := PageData{
@@ -62,19 +64,40 @@ func init() {
 		url := page.Data().UrlExtension
 		http.HandleFunc(url, handler.(func(http.ResponseWriter, *http.Request)))
 	}
-
-	fmt.Println("Finished init in main.")
-	// Set up handler
 }
 
 func main() {
 
-	fmt.Println("Running main in main.")
+	fmt.Println("Website now running.")
+	// Where are we running? (windows == my local machine)
+	var port string
+	if runtime.GOOS == "windows" {
+		port = ":3000"
+	} else {
+		port = ":" + os.Getenv("PORT)")
+	}
 
 	// Start http server
-	log.Fatal(http.ListenAndServe(":"+os.Getenv("PORT"), nil))
-	// log.Fatal(http.ListenAndServe(":3000", nil))
+	log.Fatal(http.ListenAndServe(port, nil))
 
 }
 
 // ------------------------------------------- Private ------------------------------------------- //
+
+// Serves all files and subdirectories in local static/ folder
+func serveAllStatic() {
+
+	// Serve all files in local static/ folder
+	staticFileServer := http.StripPrefix("/static/", http.FileServer(http.Dir("static")))
+	http.Handle("/static/", staticFileServer)
+
+	// Serve all subdirectories in local static/ folder
+	subDir, _ := ioutil.ReadDir("static")
+	for _, f := range subDir {
+		if f.Mode().IsDir() {
+			dirName := "/static/" + f.Name()
+			staticDirServer := http.StripPrefix(dirName, http.FileServer(http.Dir(dirName[1:len(dirName)-1])))
+			http.Handle(dirName, staticDirServer)
+		}
+	}
+}

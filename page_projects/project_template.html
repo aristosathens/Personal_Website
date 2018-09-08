@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<!-- Link to css file -->
+<head>
+    <link rel="stylesheet" type="text/css" href={{.Formatting}} media="screen" />
+</head>
+
+<!-- Clear all elements -->
+<script>
+	document.body.innerHTML = "";
+</script>
+
+
+<body>
+    <div id="centered_block">
+
+        <h1><strong>{{.Name}}</strong></h1>
+        <div style="display: inline-block; width: 10%;"><p>{{.Text}}</p></div>
+        <hr />
+
+        {{range .Images}}
+            <img src={{.}} width=200 height=auto align="middle"/>
+
+        {{end}}
+    </div>
+</body>

@@ -21,6 +21,7 @@ type IndexWebPage struct {
 	AristosPicture string
 	ResumePage     string
 	ContactPage    string
+	ProjectPage    string
 }
 
 // ------------------------------------------- Public ------------------------------------------- //
@@ -45,6 +46,7 @@ func (p *IndexWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 	if p.ResumePage == "" {
 		p.ResumePage = (*p.PageDict)["resume"].Data().UrlExtension
 		p.ContactPage = (*p.PageDict)["contact"].Data().UrlExtension
+		p.ProjectPage = (*p.PageDict)["projects"].Data().UrlExtension
 	}
 
 	// Create Golang http template from html file
@@ -58,4 +60,7 @@ func (p *IndexWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print("template executing error: ", err)
 	}
+
+	// buttonClick := r.FormValue("...")
+	// fmt.Println(buttonClick)
 }

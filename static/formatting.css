@@ -20,17 +20,15 @@ body {
     width:50%;
     text-align:right
 }
-/* 
-#centered_block_narrow {
-    display: inline-block;
-    margin-left: auto;
-    margin-right: auto;
-    height: 30px; 
-} */
 
-/* #images{
-    text-align:center;
-} */
+/* Display a button as text only */
+button:astext {
+    background:none;
+    border:none;
+    margin:0;
+    padding:0;
+    cursor: pointer;
+}
 
 #centered_element {
     left: 50%;
