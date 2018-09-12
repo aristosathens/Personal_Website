@@ -2,7 +2,7 @@ package page_projects
 
 import (
 	. "Web/main_definitions"
-	"fmt"
+
 	"html/template"
 	"io/ioutil"
 	"log"
@@ -105,7 +105,6 @@ func (p *ProjectsWebPage) initProjectList() {
 				proj.PDF = projectsUrl + fName
 			} else if endsWith(fName, []string{"png", "jpg", "jpeg", "gif", "tif"}) {
 				proj.Images = append(proj.Images, projectsUrl+proj.Name+"/"+fName)
-				fmt.Println(proj.Images)
 			}
 		}
 		p.Projects = append(p.Projects, proj)

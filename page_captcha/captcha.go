@@ -35,7 +35,7 @@ func (p *CaptchaWebPage) Data() *PageData {
 
 // Implements page's behavior. Generate new captcha and write png to ResponseWriter
 func (p *CaptchaWebPage) Handler(w http.ResponseWriter, r *http.Request) {
-	img, err := captcha.New(250, 75)
+	img, err := captcha.New(250, 250)
 	if err != nil {
 		log.Print("Captcha creation error: ", err)
 		return
