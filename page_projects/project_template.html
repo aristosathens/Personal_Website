@@ -15,12 +15,27 @@
     <div id="centered_block">
 
         <h1><strong>{{.Name}}</strong></h1>
-        <div style="display: inline-block; width: 10%;"><p>{{.Text}}</p></div>
-        <hr />
+
+        {{ if .Text }}
+            <span style="display: inline-block;">{{.Text}}</span>
+            <hr />
+        {{end}}
+
+        {{ range $key, $value := index $.Links }}
+            <span style="display: inline-block;"><a href={{$value}} target="_blank" rel="noopener">{{$key}}</a></span> &ensp;        
+        {{end}}
+        {{if .Links}}
+            <hr />
+        {{end}}
 
         {{range .Images}}
             <img src={{.}} width=200 height=auto align="middle"/>
+        {{end}}
 
+        {{ if .PDF}}
+        <!-- <div id="centered_element"> -->
+            <p align="center"><iframe src={{.PDF}} width="700" height="900"></iframe></p>
+        <!-- </div> -->
         {{end}}
     </div>
 </body>

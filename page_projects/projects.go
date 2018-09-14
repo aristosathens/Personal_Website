@@ -1,13 +1,14 @@
 package page_projects
 
 import (
-	. "Web/main_definitions"
-
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"strings"
+
+	. "Web/main_definitions"
+	"Web/utility"
 )
 
 // ------------------------------------------- Types ------------------------------------------- //
@@ -31,6 +32,7 @@ type Project struct {
 	UrlExtension string
 	TemplateHtml string
 	Text         string
+	Links        map[string]string
 	Images       []string
 	PDF          string
 	Handler      func(http.ResponseWriter, *http.Request)
@@ -96,11 +98,21 @@ func (p *ProjectsWebPage) initProjectList() {
 		proj.UrlExtension = p.UrlExtension + proj.Name + "/"
 		proj.TemplateHtml = p.TemplateHtml
 		proj.Handler = proj.projectPageHandler
+		proj.Links = map[string]string{}
 
 		for _, file := range files {
 			fName := file.Name()
-			if endsWith(fName, []string{"txt"}) {
-				proj.Text = projectsUrl + fName
+			if fName == "links.txt" {
+				links := utility.ReadHttpFile("."+projectsUrl+proj.Name+"/", fName)
+				for _, link := range links {
+					proj.Links[utility.DomainFromUrl(link)] = link
+				}
+			} else if fName == "pdf.txt" {
+				proj.PDF = utility.ReadHttpFile("."+projectsUrl+proj.Name+"/", fName)[0]
+			} else if endsWith(fName, []string{"txt"}) {
+				lines := utility.ReadHttpFile("."+projectsUrl+proj.Name+"/", fName)
+				// fmt.Println(strings.Join(lines, "\n"))
+				proj.Text = strings.Join(lines, "\n")
 			} else if endsWith(fName, []string{"pdf", "doc", "docx"}) {
 				proj.PDF = projectsUrl + fName
 			} else if endsWith(fName, []string{"png", "jpg", "jpeg", "gif", "tif"}) {
