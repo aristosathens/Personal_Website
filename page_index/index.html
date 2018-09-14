@@ -8,9 +8,11 @@
             var hiddenLinks = document.getElementById("hiddenDiv");
             if (hiddenLinks.style.display === "none") {
                 hiddenLinks.style.display = "inline-block";
-                hiddenLinks.style.width = "10%"
+                hiddenLinks.style.width = "20%"
                 document.getElementById("linksButton").style.width = "0%"
                 document.getElementById("linksButton").style.visibility = "hidden"
+                document.getElementById("linksButton").style.display = "none"
+
             }
         }
     </script>
@@ -26,20 +28,22 @@
     <div id="centered_block">
 
         <h1><strong>Aristos Athens</strong></h1>
-        <div style="display: inline-block; width: 10%;"><a href="https://github.com/aristosathens" target="_blank" rel="noopener">Github</a></div>
-        <div style="display: inline-block; width: 10%;"><a href={{.ResumePage}} rel="noopener">Resume</a></div>
-        <div style="display: inline-block; width: 10%;"><a href={{.ProjectPage}} rel="noopener">Projects</a></div>
-        <div style="display: inline-block; width: 10%;"><a href={{.ContactPage}} rel="noopener">Contact</a></div>
+        <nav>
+        <div style="display: inline-block;"><a href="https://github.com/aristosathens" target="_blank" rel="noopener">Github </a></div> &ensp;
+        <span style="display: inline-block;"><a href={{.ResumePage}} rel="noopener">Resume</a></span> &ensp;
+        <span style="display: inline-block;"><a href={{.ProjectPage}} rel="noopener">Projects</a></span> &ensp;
+        <span style="display: inline-block;"><a href={{.ContactPage}} rel="noopener">Contact</a></span> &ensp;
 
         <!-- When pressed, calls ShowMore(), which hides button and shows hiddenDiv -->
-        <button id="linksButton" style="background:none; border:none; cursor: pointer; width: 10%;" onclick="ShowMore()">[ ...] </button>
+        <button id="linksButton" style="background:none; border:none; cursor: pointer; width:5%;" onclick="ShowMore()">[ ... ] </button>
         <div id="hiddenDiv" style="display: none">
-            <div style="display: inline-block; width: 10%;"><a href="https://twitter.com/AristosAthens" target="_blank" rel="noopener">Twitter</a></div>
+            <span style="display: inline-block;"><a href="https://www.facebook.com/aristos.athens" target="_blank" rel="noopener">Facebook</a></span> &ensp;
+            <span style="display: inline-block;"><a href="https://twitter.com/AristosAthens" target="_blank" rel="noopener">Twitter</a></span> &ensp;
         </div>
-        <div style="display: block;"></div>
+        </nav>
         <hr />
         
-        <p>Graduate student interested in biotech, robotics, and computer vision, among other things. Born in Texas, spent most of my life in California. Currently finishing an M.S. in Mechanical Engineering at Stanford University.</p>
+        <p>Graduate student interested in biotech, robotics, and computer vision. Born in Texas, spent most of my life in California. Currently finishing an M.S. in Mechanical Engineering at Stanford University.</p>
         <hr />
         <p></p>
 
@@ -51,13 +55,4 @@
             </figcaption>
         </div>
     </div>
-
- 
-
-        <!-- <div id="bottom_page_text">
-                <p>This website was coded in Go.</p>
-        </div> -->
-
-
-    <!-- </div> -->
 </body>
