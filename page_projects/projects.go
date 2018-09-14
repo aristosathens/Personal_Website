@@ -111,7 +111,6 @@ func (p *ProjectsWebPage) initProjectList() {
 				proj.PDF = utility.ReadHttpFile("."+projectsUrl+proj.Name+"/", fName)[0]
 			} else if endsWith(fName, []string{"txt"}) {
 				lines := utility.ReadHttpFile("."+projectsUrl+proj.Name+"/", fName)
-				// fmt.Println(strings.Join(lines, "\n"))
 				proj.Text = strings.Join(lines, "\n")
 			} else if endsWith(fName, []string{"pdf", "doc", "docx"}) {
 				proj.PDF = projectsUrl + fName
