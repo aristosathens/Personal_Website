@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 )
 
 // ------------------------------------------- Types ------------------------------------------- //
@@ -52,7 +53,7 @@ func (p *FourZeroFourWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 	if url == "/" || url == "/main" || url == "/main/" || url == "/home" || url == "/home/" {
 		http.Redirect(w, r, p.HomePage, 301)
 		return
-	} else if url[len(url)-5:] == "/404/" || url[len(url)-4:] == "/404" {
+	} else if strings.HasSuffix(url, "/404/") || strings.HasSuffix(url, "/404") {
 		w.WriteHeader(http.StatusNotFound)
 
 		// Create Golang http template from html file

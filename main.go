@@ -3,6 +3,7 @@ package main
 import (
 	. "Web/main_definitions"
 	"Web/page_404"
+	"Web/page_about"
 	"Web/page_captcha"
 	"Web/page_contact"
 	"Web/page_index"
@@ -34,6 +35,7 @@ var pages = &map[string]WebPageInterface{
 	"contact":  &page_contact.ContactWebPage{},
 	"404":      &page_404.FourZeroFourWebPage{},
 	"projects": &page_projects.ProjectsWebPage{},
+	"about":    &page_about.AboutWebPage{},
 }
 
 // ------------------------------------------- Main ------------------------------------------- //

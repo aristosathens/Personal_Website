@@ -7,7 +7,7 @@
         function ShowMore() {
             var hiddenLinks = document.getElementById("hiddenDiv");
             if (hiddenLinks.style.display === "none") {
-                hiddenLinks.style.display = "inline-block";
+                hiddenLinks.style.display = "inline";
                 hiddenLinks.style.width = "20%"
                 document.getElementById("linksButton").style.width = "0%"
                 document.getElementById("linksButton").style.visibility = "hidden"
@@ -29,17 +29,19 @@
 
         <h1><strong>Aristos Athens</strong></h1>
         <nav>
-        <div style="display: inline-block;"><a href="https://github.com/aristosathens" target="_blank" rel="noopener">Github </a></div> &ensp;
-        <span style="display: inline-block;"><a href={{.ResumePage}} rel="noopener">Resume</a></span> &ensp;
-        <span style="display: inline-block;"><a href={{.ProjectPage}} rel="noopener">Projects</a></span> &ensp;
-        <span style="display: inline-block;"><a href={{.ContactPage}} rel="noopener">Contact</a></span> &ensp;
+            <div style="display: inline;"><a href={{.ResumePage}} rel="noopener">Resume</a></div> &ensp;
+            <span style="display: inline;"><a href="https://github.com/aristosathens" target="_blank" rel="noopener">Github</a></span> &ensp;
+            <span style="display: inline;"><a href={{.ProjectPage}} rel="noopener">Projects</a></span> &ensp;
+            <!-- When pressed, calls ShowMore(), which hides button and shows hiddenDiv -->
 
-        <!-- When pressed, calls ShowMore(), which hides button and shows hiddenDiv -->
-        <button id="linksButton" style="background:none; border:none; cursor: pointer; width:5%;" onclick="ShowMore()">[ ... ] </button>
-        <div id="hiddenDiv" style="display: none">
-            <span style="display: inline-block;"><a href="https://www.facebook.com/aristos.athens" target="_blank" rel="noopener">Facebook</a></span> &ensp;
-            <span style="display: inline-block;"><a href="https://twitter.com/AristosAthens" target="_blank" rel="noopener">Twitter</a></span> &ensp;
-        </div>
+            <button id="linksButton" style="background:none; border:none; cursor: pointer; width:5%;" onclick="ShowMore()">[ ... ]</button>
+            
+            <div id="hiddenDiv" style="display: none">
+                <span style="display: inline;"><a href={{.AboutPage}} rel="noopener">About</a></span> &ensp;
+                <span style="display: inline;"><a href={{.ContactPage}} rel="noopener">Contact</a></span> &ensp;
+                <span style="display: inline;"><a href="https://www.facebook.com/aristos.athens" target="_blank" rel="noopener">Facebook</a></span> &ensp;
+                <span style="display: inline;"><a href="https://twitter.com/AristosAthens" target="_blank" rel="noopener">Twitter</a></span> &ensp;
+            </div>
         </nav>
         <hr />
         

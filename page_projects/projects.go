@@ -149,6 +149,7 @@ func (proj *Project) projectPageHandler(w http.ResponseWriter, r *http.Request) 
 
 // Checks if string ends with any of the strings in endings
 func endsWith(toCheck string, endings []string) bool {
+	toCheck = strings.ToLower(toCheck)
 	returnVal := false
 	for _, ending := range endings {
 		if strings.HasSuffix(toCheck, ending) {

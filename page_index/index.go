@@ -22,6 +22,7 @@ type IndexWebPage struct {
 	ResumePage     string
 	ContactPage    string
 	ProjectPage    string
+	AboutPage      string
 }
 
 // ------------------------------------------- Public ------------------------------------------- //
@@ -47,6 +48,7 @@ func (p *IndexWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 		p.ResumePage = (*p.PageDict)["resume"].Data().UrlExtension
 		p.ContactPage = (*p.PageDict)["contact"].Data().UrlExtension
 		p.ProjectPage = (*p.PageDict)["projects"].Data().UrlExtension
+		p.AboutPage = (*p.PageDict)["about"].Data().UrlExtension
 	}
 
 	// Create Golang http template from html file

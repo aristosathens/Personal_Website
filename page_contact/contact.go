@@ -2,7 +2,6 @@ package page_contact
 
 import (
 	. "Web/main_definitions"
-	"fmt"
 	"gopkg.in/gomail.v2"
 	"html/template"
 	"log"
@@ -85,11 +84,9 @@ func (p *ContactWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 		Message: r.FormValue("message"),
 		Captcha: r.FormValue("captcha"),
 	}
-	fmt.Println(input)
 
 	// 3 paths: Empty input, bad input, valid input
 	if len(input.Email) == 0 && len(input.Subject) == 0 && len(input.Message) == 0 && len(input.Captcha) == 0 {
-		fmt.Println("here")
 		return
 	} else if ok, msg := isValidInput(input, captchaText); !ok {
 		p.Message = msg
@@ -111,9 +108,6 @@ func (p *ContactWebPage) Handler(w http.ResponseWriter, r *http.Request) {
 
 // Checks if user provided valid inputs for fields in html form
 func isValidInput(input UserInput, captchaText string) (bool, string) {
-
-	fmt.Println("Captcha text: " + captchaText)
-	fmt.Println("User input: " + input.Captcha)
 
 	if !isValidEmail(input.Email) {
 		return false, "Invalid email."
@@ -159,7 +153,7 @@ func generateAndSendEmail(input UserInput) {
 	m.SetHeader("From", "Aristos.Website@gmail.com")
 	m.SetHeader("To", "aristos.a.athens@gmail.com")
 	m.SetHeader("Subject", input.Subject)
-	m.SetBody("text/html", input.Message)
+	m.SetBody("text/html", "From: "+input.Email+"\n\n"+input.Message)
 
 	d := gomail.NewDialer("smtp.gmail.com", 587, "Aristos.Website", "VerySecurePassword")
 
