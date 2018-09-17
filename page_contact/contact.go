@@ -153,7 +153,7 @@ func generateAndSendEmail(input UserInput) {
 	m.SetHeader("From", "Aristos.Website@gmail.com")
 	m.SetHeader("To", "aristos.a.athens@gmail.com")
 	m.SetHeader("Subject", input.Subject)
-	m.SetBody("text/html", "From: "+input.Email+"\n\n"+input.Message)
+	m.SetBody("text/html", "From: "+input.Email+" | "+input.Message)
 
 	d := gomail.NewDialer("smtp.gmail.com", 587, "Aristos.Website", "VerySecurePassword")
 
